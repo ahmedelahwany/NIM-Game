@@ -1,6 +1,5 @@
 package NimGame.state;
 
-import javafx.print.Collation;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -21,7 +20,7 @@ class NimGameStateTest {
                 {1, 1, 1,1}
         };
         NimGameState state = new NimGameState(a,new Player("Mat"),new Player("Lena"));
-        Integer[] checkArray=Arrays.stream(state.getBoard()).flatMap(x->Arrays.stream(x)).map(x->x.isExists()).toArray(Integer[]::new);
+        Integer[] checkArray=Arrays.stream(state.getBoard()).flatMap(Arrays::stream).map(Stone::isExists).toArray(Integer[]::new);
         assertArrayEquals(new Integer [] {
                 1, 1, 1,1,
                 1, 1, 1,1,
@@ -103,7 +102,7 @@ class NimGameStateTest {
 
         // initializing the tempmovement to make it of size 4 to check whether the function 'll throw exception or not
         assertThrows(UnsupportedOperationException.class, () -> state.takeStone(2, 3));
-        List<int[]> tempMovement = new ArrayList<int[]>();
+        List<int[]> tempMovement = new ArrayList<>();
         state.setTempMovement( tempMovement);// clearing the tempmovement array to restart checking
         state.takeStone(1,1);//simulating taking the first stone from the board
 
@@ -111,20 +110,20 @@ class NimGameStateTest {
         assertArrayEquals(state.getTempMovement().get(0),new int[]{1,1});
         assertEquals(state.getActivePlayer().getTotalMoves(),1);// check whether total moves by the player have been increased or not
         assertEquals(state.getBoard()[1][1].isExists(),0);// check whether the stone has been removed or not
-        state.takeStone(0,0);//simulating taking  wrong stone from the board according the rules
+        assertThrows(UnsupportedOperationException.class, () -> state.takeStone(0, 0));//simulating taking  wrong stone from the board according the rules
         assertEquals(state.getTempMovement().size(),1);
 
         // TAKING FROM THE SAME ROW
         state.takeStone(1,0);//simulating taking right second stone from the board (same row) according the rules
         assertArrayEquals(state.getTempMovement().get(1),new int[]{1,0});
 
-        state.takeStone(2,2);//simulating taking  wrong stone from the board (not second row) according the rules
+        assertThrows(UnsupportedOperationException.class, () -> state.takeStone(2, 2));//simulating taking  wrong stone from the board (not second row) according the rules
         assertEquals(state.getTempMovement().size(),2);
         state.takeStone(1,2);//simulating taking right third stone from the board (same row) according the rules
         assertArrayEquals(state.getTempMovement().get(2),new int[]{1,2});
 
         // RESETTING THE tempmvement array TO CHECK IF THE PLAYER CN TAKE FORM THE COLUMN AS WELL ACCORDING TO THE RULES
-        List<int[]> tempMovement2 = new ArrayList<int[]>();
+        List<int[]> tempMovement2;
         tempMovement2=state.getTempMovement();
         tempMovement2.remove(2);
         tempMovement2.remove(1);
@@ -133,9 +132,9 @@ class NimGameStateTest {
         // TAKING FROM THE SAME column
         state.takeStone(0,1);//simulating taking right second stone from the board (same column) according the rules
         assertArrayEquals(state.getTempMovement().get(1),new int[]{0,1});
-        state.takeStone(2,2);//simulating taking  wrong stone from the board (not second column) according the rules
+        assertThrows(UnsupportedOperationException.class, () -> state.takeStone(2, 2));//simulating taking  wrong stone from the board (not second column) according the rules
         assertEquals(state.getTempMovement().size(),2);
-        state.takeStone(3,1);//simulating taking  third stone from the board (same column not adjacent) according the rules
+        assertThrows(UnsupportedOperationException.class, () ->state.takeStone(3,1));//simulating taking  third stone from the board (same column not adjacent) according the rules
         assertEquals(state.getTempMovement().size(),2);
         state.takeStone(2,1);//simulating taking right second stone from the board (same column and adjacent) according the rules
         assertArrayEquals(state.getTempMovement().get(2),new int[]{2,1});
