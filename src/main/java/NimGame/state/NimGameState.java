@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @Slf4j
-public class NimGameState implements Cloneable {
+public class NimGameState {
 
 
     /**
@@ -33,7 +33,7 @@ public class NimGameState implements Cloneable {
     private  Player activePlayer =new Player("");
     private Player winner = new Player("");
 
-    private List<int[]> tempMovement = new ArrayList<int[]>();
+    private List<int[]> tempMovement = new ArrayList<>();
 
     private boolean isRow ;
     private boolean gameRulesViolated=false;
@@ -120,7 +120,7 @@ public class NimGameState implements Cloneable {
      * @param col the column of the stone to be taken
      * @return {@code true} if the stone at the specified position can be taken
      * @throws IllegalArgumentException if the stone at the specified position
-     *      * can not be taken because the click is outside the board or the stone is already taken.
+     * can not be taken because the click is outside the board or the stone is already taken.
      */
     public boolean canBeTaken(int row, int col) {
         if(0 <= row && row <= 3 && 0 <= col && col <= 3 &&
@@ -132,7 +132,10 @@ public class NimGameState implements Cloneable {
             throw new IllegalArgumentException();
         }
     }
-
+    /**
+     * Switching players depending on the number of movements made by player per turn and the active player.
+     * @return if one of the players tried to switch turns without taking any stones.
+     */
     public void switchPlayers(){
         if(tempMovement.size()==0 ){
             this.ErrorMessage="You have to take at least one stone ,then switch";
@@ -167,12 +170,12 @@ public class NimGameState implements Cloneable {
         } else {
             if (canBeTaken(row, col)) {
                 int[] position = new int[2];
-               // To check if the Second taken stone in the same row or column of the previous taken stone,in addition if it's adjacent
+               // To check if the Second taken stone is in the same row or column of the previous taken stone,in addition if it's adjacent
                 if (tempMovement.size() == 1) {
                     if (((Math.abs(tempMovement.get(0)[0] - row) > 1) || (Math.abs(tempMovement.get(0)[1] - col) > 1))||
                         ((Math.abs(tempMovement.get(0)[0] - row) == 1) && (Math.abs(tempMovement.get(0)[1] - col) == 1))) {
                         this.ErrorMessage = "This Stone at (" + row +","+col +") can't be taken \n" +
-                                            " according to game rules,choose adjacent one \n" +
+                                            "according to game rules,choose adjacent one \n" +
                                             "in the same row or column or click switch button";
                         log.info(this.ErrorMessage);
                         throw new UnsupportedOperationException();
@@ -181,7 +184,7 @@ public class NimGameState implements Cloneable {
                     isRow = row == tempMovement.get(0)[0];
                 } else {
                     for (int[] array : tempMovement) {
-                   // to check if the third or fourth taken stone in the same row and adjacent
+                   // to check if the third or fourth taken stone is in the same row and adjacent
                         if (isRow) {
                             if (Math.abs(array[1] - col) == 1 && row==array[0]) {
                                 gameRulesViolated=false;
@@ -192,7 +195,7 @@ public class NimGameState implements Cloneable {
                                                 " according to game rules,choose adjacent one \n" +
                                                 " in the same row or click switch button";
 
-                        } else {    // to check if the third or fourth taken stone in the same column and adjacent
+                        } else {    // to check if the third or fourth taken stone is in the same column and adjacent
 
                             if (Math.abs(array[0] - row) == 1 && col == array[1]) {
                                 gameRulesViolated=false;
