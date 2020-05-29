@@ -63,6 +63,8 @@ public class NimGameState {
 
     /**
      * Creates a {@code NimGameState} object representing the (original)
+     * @param Player2 for player 2
+     * @param Player1  for player 1
      * initial state of the puzzle.
      */
     public NimGameState(Player Player1 ,Player Player2) {
@@ -72,7 +74,8 @@ public class NimGameState {
     /**
      * Creates a {@code NimGameState} object that is initialized it with
      * the specified array.
-     *
+     * @param Player2 for player 2
+     * @param Player1  for player 1
      * @param a an array of size 3&#xd7;3 representing the initial configuration
      *          of the board
      */
@@ -134,7 +137,7 @@ public class NimGameState {
     }
     /**
      * Switching players depending on the number of movements made by player per turn and the active player.
-     * @return if one of the players tried to switch turns without taking any stones.
+     * return from the function if one of the players tried to switch turns without taking any stones.
      */
     public void switchPlayers(){
         if(tempMovement.size()==0 ){

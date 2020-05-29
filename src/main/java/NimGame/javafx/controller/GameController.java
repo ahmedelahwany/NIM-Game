@@ -117,8 +117,8 @@ public class GameController {
     @FXML
     public void initialize() {
             SquareImages = List.of(
-                new Image(getClass().getResource("/images/square.png").toExternalForm()),
-                new Image(getClass().getResource("/images/squareFilled.png").toExternalForm())
+                new Image(getClass().getResource("/images/square.PNG").toExternalForm()),
+                new Image(getClass().getResource("/images/squareFilled.PNG").toExternalForm())
 
         );
         stepsPlayer1Label.textProperty().bind(StepsPlayer1.asString());
@@ -142,7 +142,7 @@ public class GameController {
             }
         });
 
-        Platform.runLater(() ->resetGame());
+        Platform.runLater(this::resetGame);
     }
 
 
@@ -191,8 +191,8 @@ public class GameController {
             if (!StateOfGame.isSolved() && StateOfGame.canBeTaken(row, col)) {
                 try {
                     StateOfGame.takeStone(row, col);
-                  if(StateOfGame.getErrorMessage()=="")
-                      if(playerName1==StateOfGame.getActivePlayer().getName()) {
+                  if(StateOfGame.getErrorMessage().equals(""))
+                      if(playerName1.equals(StateOfGame.getActivePlayer().getName())) {
                           StepsPlayer1.set(StepsPlayer1.get()+1);
                       } else{
                         StepsPlayer2.set(StepsPlayer2.get()+1);
@@ -249,7 +249,7 @@ public class GameController {
     private GameResult createGameResult() {
 
 
-        GameResult result = GameResult.builder()
+        return GameResult.builder()
                 .player1(playerName1)
                 .player2(playerName2)
                 .winner(StateOfGame.getWinner().getName())
@@ -258,14 +258,12 @@ public class GameController {
                 .stepsPlayer1(StepsPlayer1.get())
                 .stepsPlayer2(StepsPlayer2.get())
                 .build();
-        return result;
     }
 
     private HighScores createHighScore() {
 
-            HighScores newHighScore = HighScores.builder()
-                    .NumberOfGames(1).player(StateOfGame.getWinner().getName()).build();
-            return newHighScore;
+        return HighScores.builder()
+                .NumberOfGames(1).player(StateOfGame.getWinner().getName()).build();
     }
 
 
